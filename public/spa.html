@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+	<head>
+		<meta charset="utf-8">
+		<!-- Add description in CONTENT attr for better indexing -->
+		
+		<meta name="description" content="">	
+		<meta name="keywords" content="">
+		
+		<!-- set up the page for RWD -->
+		
+		<!--[if lte IE 8]--> 
+  <!-- make IE 8- understand media queries-->
+   <!-- <script src="respond.min.js"></script> > <! --> 
+  <!--[endif]-->
+		<!-- Do not let user scale the page: the page acts like app on mobile devs: -->
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"> -->
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- http://frontender.com.ua/mobile-web/useful-mobile-head-elements/ -->
+		<meta name="HandheldFriendly" content="True">
+		<title>Home page</title>
+		
+		<!-- FONTS -->
+		
+			<!-- STYLES -->
+		<link href='main.css' rel='stylesheet' type='text/css'>	
+		
+		<!-- JS -->
+		<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+		<script src="js/jq/jquery-1.12.3.js"></script>
+		<script src="js/mustache.js"></script>
+		<script src="js/spa.js"></script>
+		<script src="js/utilities.js"></script>
+		<script src="js/templates.js"></script>
+		<script src="js/spa-home.js"></script>
+		<script src="js/modules/spa-menu.js"></script>
+		<script src="js/modules/spa-featured.js"></script>
+		<script src="js/modules/spa-secondary-featured.js"></script>
+		<script src="js/modules/spa-latest.js"></script>
+		<script src="js/modules/spa-contributors.js"></script>
+		<script src="js/modules/spa-popular.js"></script>
+		<script src="js/modules/spa-footer.js"></script>
+		<script src="js/modules/spa-articles.js"></script>
+		<script src="js/modules/spa-rubric.js"></script>
+		<script src="js/modules/spa-author.js"></script>
+		<script>
+    $(function () { spa.initModule( $('#home-page') ); });
+  </script>
+	</head>
+ <body>
+		<div id="home-page">
+				<header>
+					<h1><a href="#home">The Magazine</a></h1>
+					<div class="menu-module"></div>
+				</header>
+				<div class="page-wrapper">
+					<div class="home-page-wrapper">
+							<div class="featured-module">
+									<section class="featured-article">
+											<figure>
+													<a href="{{title_href}}"><img src="images/background/upfeathersLight.jpg" data-src="{{img_src}}" alt=""></a>
+											</figure>
+											<section class="description">
+													<p class="rubric"><a href="{{rubric_href}}">{{rubric}}</a></p>
+													<h2><a href="{{title_href}}">{{title}}</a></h2>
+													<div class="author">By: <a href="{{author_href}}">{{author}}</a></div>
+													<p class="short_desc">{{summary}}</p>
+											</section>
+								</section>
+							</div>
+							<div class="secondary-featured-module">
+									<div class="secondary-feature-container">
+											<section class="secondary-featured-articles"></section>
+											<section class="other-secondary-featured-articles"></section>
+								</div>
+							</div>
+							<div class="latest-module">
+								<h1 class="latest-header"><a href="#latest">The latest</a></h1>
+								<div class="content-wrapper"></div>
+								<div class="button-wrapper"><a href="#latest " class="button">More articles</a></div>
+							</div>
+							<div class="wrapper-contributors-popular">
+								<div class="contributors-module">
+									<h1 class="contributors-header"><a href="#contributors">Contributors</a></h1>
+										<div class="content-wrapper"></div>
+									<div class="button-wrapper"><a href="#contributors" class="button">More contributors</a></div>
+								</div>
+								<div class="popular-module">
+									<h1 class="popular-header"><a href="#popular">Popular</a></h1>
+									<div class="content-wrapper"></div>
+									<div class="button-wrapper"><a href="#popular" class="button">Top 10 popular articles</a></div>
+								</div>
+							</div>
+					</div>
+					<div class="spa-modules-wrapper"></div>
+				</div>
+				<div class="oops-page"></div>		
+				<footer>
+					<div class="footer-module">
+					</div>
+				</footer>
+		</div>
+	</body>
+</html>
