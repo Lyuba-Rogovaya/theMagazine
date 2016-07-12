@@ -11,7 +11,7 @@ spa.home = (function() {
         anchor: null ,
         anchor_previous: null ,
         anchor_proposed: null
-    }, allowed_anchors_map = {}, openNewPage, initModule, onHashchange, artPath, rubricPath, authorPath, notFoundHandler, serverErrorHandler;
+    }, allowed_anchors_map = {}, openNewPage, returnToHomePage, setJqueryMap, initModule, onHashchange, artPath, rubricPath, authorPath, notFoundHandler, serverErrorHandler;
     allowed_anchors_map = {
         latest: true,
         home: true,
@@ -23,16 +23,16 @@ spa.home = (function() {
     };
     //----------------- END MODULE SCOPE VARIABLES ---------------
     //------------------- BEGIN ERROR HANDLERS ------------------
-	    notFoundHandler = function($error){
-						  var errorMSG = "<p>Our apologies, this is almost certainly not the page you were looking for. Please visit our <a href=\"#home\">home page.</a></p>"
+	    notFoundHandler = function(error){
+						  var errorMSG = "<p>Our apologies, this is almost certainly not the page you were looking for. Please visit our <a href=\"#home\">home page.</a></p>";
 						   jqueryMap.$oops_page.html(errorMSG);
 						   jqueryMap.$page_wrapper.hide();
 						   jqueryMap.$oops_page.show();
 						   
 					};
 	    
-	    serverErrorHandler = function($error){
-					   var errorMsg = "Our apologies, server error occured. Please, try again later."
+	    serverErrorHandler = function(error){
+					   var errorMsg = "Our apologies, server error occured. Please, try again later.";
 								jqueryMap.$oops_page.html(errorMSG);
 						  jqueryMap.$page_wrapper.hide();
 						  jqueryMap.$oops_page.show();
@@ -41,7 +41,12 @@ spa.home = (function() {
     //------------------- BEGIN UTILITY METHODS ------------------
     //-------------------- END UTILITY METHODS -------------------
     //--------------------- BEGIN DOM METHODS --------------------
-    var setJqueryMap = function() {
+	
+	   // -----------begin DOM method /setJqueryMap/ ---------
+    //
+    // purpose: cashes DOM on module initialization
+	   //
+    setJqueryMap = function() {
         var $container = stateMap.$container;
         stateMap.pageId = $container.attr('id');
         var $containerParent = $container.parents('html');
@@ -65,18 +70,17 @@ spa.home = (function() {
 									   $page_wrapper : $container.find('.page-wrapper'),
             imgs: null
         };
-    }
-    ;
+    };
+	   // -----------end DOM method /setJqueryMap/ ---------
+	
     // -----------begin DOM method /openNewPage/ ---------
     //
-    // purpose: opens new page on hash change;
+    // purpose: opens new page on hash change: calles the module /openPage/ method and sets up the view of the container /setupModulePage/;
     //          updates current page id
     //          updates current page title
-    //          appends the module view div to the spa_modules_wrapper section
+
     openNewPage = function(module_name) {
-        var setupModulePage, openPage, modulePath = artPath || rubricPath || authorPath, 
-												resourseName = modulePath ? modulePath.substring(modulePath.indexOf("/") + 1) : "", 
-												$requestedModule = null , $requestedResourse = null ;
+        var setupModulePage, openPage, modulePath = artPath || rubricPath || authorPath, resourseName = modulePath ? modulePath.substring(modulePath.indexOf("/") + 1) : "", $requestedModule = null , $requestedResourse = null;
 					
         spa[module_name].openPage(jqueryMap.$spa_modules_wrapper, modulePath)
 									   .then(function(result) {
@@ -118,12 +122,13 @@ spa.home = (function() {
     };
 
     // -----------end DOM method /openNewPage/ ---------
+	
     // ---------- begin DOM method / returnToHomePage / ---------	
     //
-    // purpose:  reopens home page; 
+    // purpose:  reopens home page: hides all opened modules and shows home page; 
     //           updates current page id;
     //           updates current page title;
-    var returnToHomePage = function() {
+    returnToHomePage = function() {
 					   jqueryMap.$oops_page.hide();
 					   jqueryMap.$page_wrapper.show();
         jqueryMap.$container.attr('id', "home-page");
@@ -133,9 +138,9 @@ spa.home = (function() {
         jqueryMap.$home_page_wrapper.show();
         loadImages();
         return true;
-    }
-    ;
+				};
     // ---------- end DOM method / returnToHomePage / ------------
+	
     //---------------------- END DOM METHODS ---------------------
 	
     //------------------- BEGIN EVENT HANDLERS -------------------
@@ -152,9 +157,9 @@ spa.home = (function() {
         hash = location.hash.substr(1);
         
 					  //first load ? : do nothing let the spa.initModule do the job
-        if ((hash == "" || hash == "home") && !stateMap.anchor_previous) {
-            return;
-        }			
+       // if ((hash == "" || hash == "home") && !stateMap.anchor_previous) {
+       //     return;
+       // }			
 					  // home page requested?
         if (hash == "" || hash == "home") {
             if (hash === "") {
@@ -167,10 +172,8 @@ spa.home = (function() {
         } 
 					   // other module requested? check anchor validiti
         stateMap.anchor_proposed = hash;
-					   /*				
-								rubric/, articles/ and contributors/ URIs may be followed by a resource identifier (e.g. article title, rubric or author name),
-								therefore a complete URI is cashed in a corresponding variable and then passed to the module httpGet method, which retrieves the resource from the database based on the URI 	 				
-								*/
+					   /* rubric/, articles/ and contributors/ URIs may be followed by a resource identifier (e.g. article title, rubric or author name),
+								therefore a complete URI is cashed in a corresponding variable and then passed to the module httpGet method, which retrieves the resource from the database based on the URI */
         if (hash.indexOf("rubric/") !== -1) {
             rubricPath = hash;
             stateMap.anchor_proposed = "rubric"
@@ -233,20 +236,17 @@ spa.home = (function() {
     ;
     //-------------------- END EVENT HANDLERS --------------------
     //------------------- BEGIN PUBLIC METHODS -------------------
-    // Begin public method /configModule/
-    // 
+
     // Begin public method /initModule/
-    // Purpose : Initializes module
+    // Purpose : Initializes modules
     // Arguments :
-    // * $container the jquery element used by this feature
-    // Returns : true
-    // Throws : nonaccidental
+    // * $container the jquery element used by this module
     //
     //------------------- BEGIN PUBLIC METHODS -------------------
     initModule = function($container) {
         stateMap.$container = $container;
         setJqueryMap();
-        // initialize feature modules
+        // initialize modules
         spa.menu.initModule(jqueryMap.$menu);
         spa.featured.initModule(jqueryMap.$featured);
         spa.secondaryFeatured.initModule(jqueryMap.$secondaryFeatured);
@@ -254,10 +254,10 @@ spa.home = (function() {
         spa.contributors.initModule(jqueryMap.$contributorsContent);
         spa.popular.initModule(jqueryMap.$popularContent);
         spa.footer.initModule(jqueryMap.$footer);
+        // cash and load images
         jqueryMap.imgs = $('img:visible');
-        // load images
-        setTimeout(loadImages, 500);
-        // Loads images within all modules when they are accessed directly (e.g. http://theMagazine#latest)
+        setTimeout(loadImages, 500); //Loads images within all modules when they are accessed directly (e.g. http://theMagazine#latest)
+
         $(window).on("hashchange", onHashchange).trigger("hashchange");
         return true;
     }

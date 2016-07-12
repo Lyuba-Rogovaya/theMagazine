@@ -11,12 +11,13 @@ spa.latest = function() {
         $moduleContainer: null ,
         isLoaded: false
     }, jqueryMap = {
-        imgs: null ,
         $button: null ,
         $header: null
     }, fetchInitContent, openPage, loadMoreArt, initModule, showMoreArticles, setJqueryMap, artAvailable, artLoaded = 0, updateButtonText;
     //----------------- END MODULE SCOPE VARIABLES ---------------
     //------------------- BEGIN UTILITY METHODS ------------------
+    // Begin utility method /updateButtonText/
+    // Purpose: updates text on the button to show the number of available latest articles for load
     updateButtonText = function(artAvailable) {
         if (artAvailable === 0) {
             jqueryMap.$button.html("All articles were loaded");
@@ -26,8 +27,12 @@ spa.latest = function() {
             jqueryMap.$button.html(artAvailable + " articles left");
         }
     }
+    // End utility method /updateButtonText/
     //-------------------- END UTILITY METHODS -------------------
     //--------------------- BEGIN DOM METHODS --------------------
+    // Begin DOM method /setJqueryMap/
+    // purpose: cashes module container and DOM on module init load /fetchInitContent/ and module opening /openPage/
+    //
     setJqueryMap = function() {
         stateMap.$moduleContainer = $('.latest-container');
         jqueryMap.$button = stateMap.$moduleContainer.find('.button');
@@ -37,6 +42,8 @@ spa.latest = function() {
     ;
     //---------------------- END DOM METHODS ---------------------
     //------------------- BEGIN EVENT HANDLERS -------------------
+    // Begin event handler /loadMoreArt/
+    // Purpose: loads more articles on button click, updates the number of the available articles 
     loadMoreArt = function() {
         var output = "", startFrom = artLoaded, i = 0, limit = i + 4, renderContent;
         if (artAvailable === 0) {
@@ -63,15 +70,20 @@ spa.latest = function() {
             updateButtonText(artAvailable);
         }
     }
+    ;
+    // End event handler /setJqueryMap/
+    // Begin event handler /showMoreArticles/
+    // Purposes: just for convenience
     showMoreArticles = function(e) {
         loadMoreArt();
     }
+    ;
+    // End event handler /showMoreArticles/
     //-------------------- END EVENT HANDLERS --------------------
     //------------------- BEGIN PUBLIC METHODS -------------------
-    // Begin public method /openPage/
-    // Purpose: fetch data from the server and update the module view
-    // Arguments: articlesPerRequest, number
-    //            container, jQuery object
+	
+    // Begin public method /fetchInitContent/
+    // Purpose: fetches content for the home page latest mini-module, then renders templates and appends them to the container
     fetchInitContent = function(articlesPerRequest, container) {
         var i, output = "", renderContent;
         /* fetch module content form the server then update the view*/
@@ -90,6 +102,9 @@ spa.latest = function() {
         }
     }
     ;
+    // End public method /fetchInitContent/
+    // Begin public method /openPage/
+    // Purpose: checks if the module is already opened, if yes, respons with true, otherwise fetches module data from the database, then renders module templates and appends templates to the container
     openPage = function($container) {
         return new Promise(function(resolve, reject) {
             var i, output, renderContent;
@@ -130,12 +145,7 @@ spa.latest = function() {
     ;
     // End public method /openPage/
     // Begin public method /initModule/
-    // Purpose : Initializes module
-    // Arguments :
-    // * $container the jquery element used by this feature
-    // Returns : true
-    // Throws : nonaccidental
-    //
+    // Purpose : Initializes module, attaches event listeners, cashes DOM
     initModule = function($container) {
         stateMap.$initContainer = $container;
         fetchInitContent(configMap.tmplPerInitLoad, $container);

@@ -13,6 +13,8 @@ spa.popular = (function() {
     //----------------- END MODULE SCOPE VARIABLES ---------------
     //--------------------- BEGIN DOM METHODS --------------------
     // Begin DOM method /setJqueryMap/
+    // purpose: cashes module container and DOM on module opening /openPage/
+    //
     setJqueryMap = function() {
         stateMap.$moduleContainer = $('.popular-container');
         jqueryMap.$header = stateMap.$moduleContainer.find('.module-header');
@@ -21,11 +23,7 @@ spa.popular = (function() {
     ;
     // End DOM method /setJqueryMap/
     // Begin DOM method /fetchInitContent/
-    // Purpose : appends rubric module to the home page and fills it with content
-    // Arguments :
-    // *popularPerRequest - number of articles to be loaded
-    // *container - append target on the home page
-    //
+    // Purpose: fetches content for the home page popular mini-module, then renders templates and appends them to the container
     fetchInitContent = function(container) {
         var i, output = "", renderContent;
         renderContent = function(data) {
@@ -51,6 +49,7 @@ spa.popular = (function() {
     //-------------------- END EVENT HANDLERS --------------------
     //------------------- BEGIN PUBLIC METHODS -------------------
     // Begin public method /openPage/
+    // Purpose: checks if the module is already opened, if yes, respons with true, otherwise fetches module data from the database, then renders module templates and appends templates to the container
     openPage = function($container) {
         return new Promise(function(resolve, reject) {
             var i, output = "", renderContent;
@@ -83,13 +82,9 @@ spa.popular = (function() {
         );
     }
     ;
+    // End public method /openPage/
     // Begin public method /initModule/
-    // Purpose : Initializes module
-    // Arguments :
-    // * $container the jquery element used by this feature
-    // Returns : true
-    // Throws : nonaccidental
-    //
+    // Purpose : Initializes module on home page load, cashes DOM;
     initModule = function($container) {
         stateMap.$container = $container;
         fetchInitContent($container);

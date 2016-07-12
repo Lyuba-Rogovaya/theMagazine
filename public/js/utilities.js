@@ -1,3 +1,4 @@
+'use srtict'
 function httpReq(method, url) {
 	return new Promise(function(resolve, reject) {
 		$.ajax({

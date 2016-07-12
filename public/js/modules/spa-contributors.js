@@ -24,6 +24,8 @@ spa.contributors = (function() {
     //-------------------- END UTILITY METHODS -------------------
     //--------------------- BEGIN DOM METHODS --------------------
     // Begin DOM method /setJqueryMap/
+    // purpose: cashes module container and DOM on module opening /openPage/
+    //
     setJqueryMap = function() {
         stateMap.$moduleContainer = $('.contributors-container');
         jqueryMap.$contribGallery = stateMap.$moduleContainer.find('ul');
@@ -34,13 +36,25 @@ spa.contributors = (function() {
     //------------------- BEGIN EVENT HANDLERS -------------------
     //-------------------- END EVENT HANDLERS --------------------
     //------------------- BEGIN PUBLIC METHODS -------------------
-    // Begin public method /fetchInitContent/
-    // Purpose: fetch data from the server and update the module view
-    // Arguments: contributorsPerRequest, number
-    //            container, jQuery object
+    // Begin public method /openPage/
+    // Purpose: checks if the module is already opened, if yes, respons with true, otherwise fetches module data from the database, then renders module templates and appends templates to the container
     openPage = function($container) {
         return new Promise(function(resolve, reject) {
             var i, output = "", limit, renderContent;
+            if (!stateMap.isLoaded) {
+                httpReq("GET", 'allcontributors').then(function(data) {
+                    if (!data.length) {
+                        throw new Error("Could not find contributors");
+                    }
+                    renderContent(data);
+                    stateMap.isLoaded = true;
+                    resolve(true);
+                }).catch(function(error) {
+                    reject(error);
+                });
+            } else if (stateMap.isLoaded) {
+                resolve(true);
+            }
             renderContent = function(data) {
                 limit = data.length;
                 $container.append(contribContainerTmpl);
@@ -56,26 +70,20 @@ spa.contributors = (function() {
                 jqueryMap.$contribGallery.addClass('js-contibGallery');
             }
             ;
-            if (!stateMap.isLoaded) {
-                httpReq("GET", 'allcontributors').then(function(data) {
-                    if (!data.length) {
-                        throw new Error("Could not find contributors");
-                    }
-                    renderContent(data);
-                    stateMap.isLoaded = true;
-                    resolve(true);
-                }).catch(function(error) {
-                    reject(error);
-                });
-            } else if (stateMap.isLoaded) {
-                resolve(true);
-            }
         }
         )
     }
     ;
+    // End public method /openPage/
+    // Begin public method /fetchInitContent/
+    // Purpose: fetches content for the home page contributors mini-module, then renders templates and appends them to the container
     fetchInitContent = function(container) {
         var i, output = "", renderContent, lim;
+        httpReq("GET", 'contributors/' + configMap.tmplPerInitLoad).then(function(data) {
+            renderContent(data);
+        }).catch(function(error) {
+            console.log(error);
+        });
         renderContent = function(data) {
             lim = data.length;
             for (i = 0; i < lim; i++) {
@@ -87,20 +95,11 @@ spa.contributors = (function() {
             $(output).appendTo(container);
             fixStyle(container);
         }
-        httpReq("GET", 'contributors/' + configMap.tmplPerInitLoad).then(function(data) {
-            renderContent(data);
-        }).catch(function(error) {
-            console.log(error);
-        })
     }
     ;
+    // End public method /fetchInitContent/
     // Begin public method /initModule/
-    // Purpose : Initializes module
-    // Arguments :
-    // * $container the jquery element used by this feature
-    // Returns : true
-    // Throws : nonaccidental
-    //
+    // Purpose : cashes DOM and initializes contributors mini-module on home page load 
     initModule = function($container) {
         setJqueryMap();
         fetchInitContent($container);

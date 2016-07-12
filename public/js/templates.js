@@ -1,4 +1,5 @@
- var navigationTmpL = "",
+'use srtict'; 
+var navigationTmpL = "",
 					latestTmpl = "",
 					contributorsTmpl = "",
 					contibGalleryTmpl = "",
@@ -16,7 +17,8 @@
 					rubricContainerTmpl = "",
 					articleContainerTmpl = "",
 					authorContainerTmpl = "",
-					authorTmpl = "";
+					authorTmpl = "",
+					footerTmpl= "";
 
 navigationTmpL += "				  <nav>";
 navigationTmpL += "				   <ul>";
@@ -186,3 +188,11 @@ authorTmpl += "							  <h3 class=\"title\"><a href=\"{{article_link}}\">{{title
 authorTmpl += "							  <p class=\"summary\">{{summary}}<\/p>";
 authorTmpl += "						 <\/div>";
 authorTmpl += "					<\/article>";
+
+footerTmpl += "<div class=\"site-links-section\">";
+footerTmpl +=   "<a href=\"#about-us\">About us<\/a>";
+footerTmpl +=   "<a href=\"#contact\">Contact<\/a>";
+footerTmpl +=   "<a href=\"#contributors\">Authors<\/a>";
+footerTmpl +=   "<a href=\"#\">Careers<\/a>";
+footerTmpl += "<\/div>";
+footerTmpl += "<p class=\"terms\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<\/p>";

@@ -648,6 +648,7 @@ footer p {
    font-size: 70%;
 }
 .oops-page {
+	display: none;
 	max-width: 960px;
 	width: 960px;
 	height: 60vh;
