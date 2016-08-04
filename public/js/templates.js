@@ -69,7 +69,7 @@ contributorsTmpl += "						 <figure><a href=\"{{author_link}}\"><img src=\"image
 contributorsTmpl += "						 <div class=\"contributor-info\">";
 contributorsTmpl += "							  <p class=\"name\"><a href=\"{{author_link}}\">{{author_name}}<\/a><\/p>";
 contributorsTmpl += "							  <a href=\"{{article_link}}\" class=\"featured-contrib-art\">{{title}}<\/a>";
-contributorsTmpl += "							  <a href=\"{{author_link}}/all-work\" class=\"all-work\">All work >><\/a>";
+contributorsTmpl += "							  <a href=\"{{author_link}}\#all-work\" class=\"all-work\">All work >><\/a>";
 contributorsTmpl += "						 <\/div>";
 contributorsTmpl += "					<\/div>";
 
